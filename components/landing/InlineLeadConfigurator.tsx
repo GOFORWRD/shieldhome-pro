@@ -459,7 +459,7 @@ export default function InlineLeadConfigurator({
 
           <p className={cn('text-[10px] leading-[1.5] text-center', subtleColor)}>
             By tapping a credit score above, you agree to receive calls, texts, and emails from
-            ShieldHome Pro and Vivint Smart Home at the number provided (including by autodialer
+            ShieldHome Pro at the number provided (including by autodialer
             and pre-recorded messages). Consent is not a condition of purchase. Msg &amp; data rates
             may apply; reply <strong>STOP</strong> to opt out. View our{' '}
             <a href="/privacy" className="underline hover:opacity-80 transition-opacity">Privacy Policy</a>

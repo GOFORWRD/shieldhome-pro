@@ -638,7 +638,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
               {heroPrefill && (
                 <p className="mt-5 text-[11px] text-gray-500 leading-relaxed text-center">
                   By selecting an option above, I agree to receive calls, texts, and emails from
-                  ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
+                  ShieldHome Pro at the number provided, including by autodialer.
                   Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
                 </p>
               )}
@@ -712,7 +712,7 @@ export default function QuizFunnel({ className, isModal = false, onClose }: Quiz
                   />
                   <span className="text-xs text-gray-500 leading-relaxed">
                     By clicking &ldquo;Get My Free Quote,&rdquo; I agree to receive calls, texts, and emails
-                    from ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer.
+                    from ShieldHome Pro at the number provided, including by autodialer.
                     Consent is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
                   </span>
                 </label>

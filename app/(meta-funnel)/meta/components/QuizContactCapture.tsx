@@ -215,7 +215,7 @@ export default function QuizContactCapture({
             {/* TCPA consent */}
             <p className="text-[10px] text-slate-400 leading-relaxed text-center font-body">
               By clicking &lsquo;See My Score,&rsquo; I agree to receive calls, texts, and emails from
-              ShieldHome Pro and Vivint Smart Home at the number provided, including by autodialer. Consent
+              ShieldHome Pro at the number provided, including by autodialer. Consent
               is not a condition of purchase. Msg &amp; data rates may apply. Reply STOP to opt out.
             </p>
           </form>
