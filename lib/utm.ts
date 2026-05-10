@@ -4,8 +4,11 @@ export interface TrackingData {
   source: string | null
   medium: string | null
   campaign: string | null
+  campaignId: string | null
   adSet: string | null
+  adsetId: string | null
   adId: string | null
+  placement: string | null
   keyword: string | null
   utmContent: string | null
   gclid: string | null
@@ -39,8 +42,9 @@ function detectBrowser(): string {
 export function captureTrackingData(): TrackingData {
   if (typeof window === 'undefined') {
     return {
-      source: null, medium: null, campaign: null, adSet: null,
-      adId: null, keyword: null, utmContent: null, gclid: null,
+      source: null, medium: null, campaign: null, campaignId: null,
+      adSet: null, adsetId: null, adId: null, placement: null,
+      keyword: null, utmContent: null, gclid: null,
       fbclid: null, kwParam: null, oid: null, landingPage: '/', referrer: '', deviceType: 'desktop', browser: 'Unknown'
     }
   }
@@ -51,8 +55,11 @@ export function captureTrackingData(): TrackingData {
     source: params.get('utm_source'),
     medium: params.get('utm_medium'),
     campaign: params.get('utm_campaign'),
+    campaignId: params.get('utm_id') || params.get('campaign_id'),
     adSet: params.get('utm_adset') || params.get('adset_name'),
-    adId: params.get('utm_ad') || params.get('ad_name'),
+    adsetId: params.get('adset_id'),
+    adId: params.get('utm_ad') || params.get('ad_name') || params.get('ad_id') || params.get('tw_adid'),
+    placement: params.get('placement'),
     keyword: params.get('utm_term'),
     utmContent: params.get('utm_content'),
     gclid: params.get('gclid'),
