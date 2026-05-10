@@ -50,6 +50,9 @@ model Lead {
   campaign                String?
   adSet                   String?
   adId                    String?
+  adsetId                 String?
+  campaignId              String?
+  placement               String?
   keyword                 String?
   landingPage             String?
   referrer                String?
@@ -343,6 +346,9 @@ model MetaQuizLead {
   utmTerm            String?
   utmAdset           String?
   utmAdId            String?
+  adsetId            String?
+  campaignId         String?
+  placement          String?
   landingPage        String?
   referrer           String?
   deviceType         String?
