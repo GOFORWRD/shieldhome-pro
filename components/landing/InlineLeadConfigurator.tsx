@@ -73,9 +73,6 @@ export default function InlineLeadConfigurator({
   const [creditTier, setCreditTier] = useState<CreditTierValue | ''>('')
   const [creditTierError, setCreditTierError] = useState('')
   const [phoneDisplay, setPhoneDisplay] = useState('')
-  const [smsConsent, setSmsConsent] = useState(false)
-  const [tcpaChecked, setTcpaChecked] = useState(false)
-  const [tcpaError, setTcpaError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [belowSuccess, setBelowSuccess] = useState(false)
@@ -124,21 +121,12 @@ export default function InlineLeadConfigurator({
   }
 
   function selectCredit(value: CreditTierValue) {
-    if (!tcpaChecked) {
-      setTcpaError('Please agree to the terms above before continuing.')
-      return
-    }
     setCreditTier(value)
     setCreditTierError('')
-    setTcpaError('')
     void handleSubmit((contact) => submitLead(contact, value))()
   }
 
   async function onSubmit(contact: ContactForm) {
-    if (!tcpaChecked) {
-      setTcpaError('Please agree to the terms above before continuing.')
-      return
-    }
     if (!creditTier) {
       setCreditTierError('Please select a credit range')
       return
@@ -170,7 +158,7 @@ export default function InlineLeadConfigurator({
           creditScoreRange: creditEntry.enumValue,
           segment: `configurator:${homeType.toLowerCase()}`,
           tcpaConsent: true,
-          smsConsent,
+          smsConsent: true,
           ...tracking,
         }),
       })
@@ -428,44 +416,9 @@ export default function InlineLeadConfigurator({
             {errors.phone && <p className="text-[11px] text-red-600 mt-1">{errors.phone.message}</p>}
           </div>
 
-          {/* Required TCPA consent checkbox — must check before credit pills fire */}
-          <label className="flex items-start gap-2.5 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={tcpaChecked}
-              onChange={(e) => { setTcpaChecked(e.target.checked); if (e.target.checked) setTcpaError('') }}
-              className="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
-            />
-            <span className={cn('text-[10px] leading-[1.5]', subtleColor)}>
-              <span className="text-red-500 font-bold">*</span>{' '}
-              I agree to receive calls and emails from ShieldHome Pro and Vivint Smart Home
-              at the number provided, including by autodialer. Consent is not a condition of
-              purchase. View our{' '}
-              <a href="/privacy" className="underline hover:opacity-80 transition-opacity">Privacy Policy</a>
-              {' '}&amp;{' '}
-              <a href="/terms" className="underline hover:opacity-80 transition-opacity">Terms of Service</a>.
-            </span>
-          </label>
-          {tcpaError && <p className="text-[11px] text-red-600 -mt-1">{tcpaError}</p>}
-
-          {/* Optional SMS marketing checkbox — Twilio A2P 10DLC compliance (must NOT be required) */}
-          <label className="flex items-start gap-2.5 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={smsConsent}
-              onChange={(e) => setSmsConsent(e.target.checked)}
-              className="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
-            />
-            <span className={cn('text-[10px] leading-[1.5]', subtleColor)}>
-              (Optional) By checking, I agree to receive promotional SMS messages from ShieldHome Pro.
-              Message frequency may vary. Msg &amp; data rates may apply.
-              Reply <strong>HELP</strong> for help or <strong>STOP</strong> to opt-out.
-            </span>
-          </label>
-
           <div>
             <label className={cn('block text-[12px] font-medium mb-1.5', labelColor)}>
-              Credit Score
+              Credit Score <span className={cn('font-normal', subtleColor)}>· tap to submit</span>
             </label>
             <div
               role="radiogroup"
@@ -503,6 +456,16 @@ export default function InlineLeadConfigurator({
               {submitError}
             </div>
           )}
+
+          <p className={cn('text-[10px] leading-[1.5] text-center', subtleColor)}>
+            By tapping a credit score above, you agree to receive calls, texts, and emails from
+            ShieldHome Pro and Vivint Smart Home at the number provided (including by autodialer
+            and pre-recorded messages). Consent is not a condition of purchase. Msg &amp; data rates
+            may apply; reply <strong>STOP</strong> to opt out. View our{' '}
+            <a href="/privacy" className="underline hover:opacity-80 transition-opacity">Privacy Policy</a>
+            {' '}&amp;{' '}
+            <a href="/terms" className="underline hover:opacity-80 transition-opacity">Terms</a>.
+          </p>
 
           <div className={cn('flex items-center justify-center gap-1.5 pt-1', subtleColor)}>
             <Lock size={12} className="text-emerald-500" />
