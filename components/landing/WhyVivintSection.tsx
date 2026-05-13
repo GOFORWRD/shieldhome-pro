@@ -1,6 +1,8 @@
 'use client'
 
+import { Phone } from 'lucide-react'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 const blocks = [
   {
@@ -27,9 +29,17 @@ const blocks = [
 
 interface WhyVivintSectionProps {
   onQuizOpen?: () => void
+  callMode?: boolean
 }
 
-export default function WhyVivintSection({ onQuizOpen }: WhyVivintSectionProps) {
+function trackPhoneClick() {
+  if (typeof window !== 'undefined') {
+    const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+    dl?.push({ event: 'phone_click', source: 'why_vivint' })
+  }
+}
+
+export default function WhyVivintSection({ onQuizOpen, callMode }: WhyVivintSectionProps) {
   const headingRef = useScrollReveal<HTMLDivElement>()
   const gridRef = useStaggerReveal<HTMLDivElement>(100)
   const ctaRef = useScrollReveal<HTMLDivElement>()
@@ -71,7 +81,16 @@ export default function WhyVivintSection({ onQuizOpen }: WhyVivintSectionProps) 
         </div>
 
         <div ref={ctaRef} className="text-center mt-10 md:mt-12">
-          {onQuizOpen ? (
+          {callMode ? (
+            <a
+              href={`tel:${PHONE_NUMBER_RAW}`}
+              onClick={trackPhoneClick}
+              className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"
+            >
+              <Phone size={16} />
+              Call to Get My Free Quote
+            </a>
+          ) : onQuizOpen ? (
             <button
               onClick={onQuizOpen}
               className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"

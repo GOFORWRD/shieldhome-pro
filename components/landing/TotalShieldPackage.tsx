@@ -7,6 +7,7 @@ import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
 
 interface TotalShieldPackageProps {
   onQuizOpen?: () => void
+  callMode?: boolean
 }
 
 const lineItems = [
@@ -57,7 +58,7 @@ const lineItems = [
   },
 ]
 
-export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackageProps) {
+export default function TotalShieldPackage({ onQuizOpen, callMode }: TotalShieldPackageProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -176,29 +177,42 @@ export default function TotalShieldPackage({ onQuizOpen }: TotalShieldPackagePro
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              {onQuizOpen ? (
-                <button
-                  onClick={onQuizOpen}
-                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[16px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
-                >
-                  See If I Qualify →
-                </button>
-              ) : (
+              {callMode ? (
                 <a
-                  href="#quiz"
-                  className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[16px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
+                  href={`tel:${PHONE_NUMBER_RAW}`}
+                  onClick={trackPhoneClick}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[16px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
                 >
-                  See If I Qualify →
+                  <Phone size={16} />
+                  Call to Lock In This Offer
                 </a>
+              ) : (
+                <>
+                  {onQuizOpen ? (
+                    <button
+                      onClick={onQuizOpen}
+                      className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[16px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
+                    >
+                      See If I Qualify →
+                    </button>
+                  ) : (
+                    <a
+                      href="#quiz"
+                      className="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[16px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
+                    >
+                      See If I Qualify →
+                    </a>
+                  )}
+                  <a
+                    href={`tel:${PHONE_NUMBER_RAW}`}
+                    onClick={trackPhoneClick}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-slate-600 hover:border-slate-500 text-white px-6 py-4 rounded-lg font-heading font-semibold text-[15px] transition-colors"
+                  >
+                    <Phone size={15} />
+                    Call {PHONE_NUMBER}
+                  </a>
+                </>
               )}
-              <a
-                href={`tel:${PHONE_NUMBER_RAW}`}
-                onClick={trackPhoneClick}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-slate-600 hover:border-slate-500 text-white px-6 py-4 rounded-lg font-heading font-semibold text-[15px] transition-colors"
-              >
-                <Phone size={15} />
-                Call {PHONE_NUMBER}
-              </a>
             </div>
           </div>
         </div>

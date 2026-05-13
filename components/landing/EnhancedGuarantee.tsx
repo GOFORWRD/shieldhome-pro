@@ -1,10 +1,19 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { ShieldCheck, Lock, BadgeDollarSign } from 'lucide-react'
+import { ShieldCheck, Lock, BadgeDollarSign, Phone } from 'lucide-react'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 interface EnhancedGuaranteeProps {
   onQuizOpen?: () => void
+  callMode?: boolean
+}
+
+function trackPhoneClick() {
+  if (typeof window !== 'undefined') {
+    const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+    dl?.push({ event: 'phone_click', source: 'guarantee' })
+  }
 }
 
 const guarantees = [
@@ -27,7 +36,7 @@ const guarantees = [
   },
 ]
 
-export default function EnhancedGuarantee({ onQuizOpen }: EnhancedGuaranteeProps) {
+export default function EnhancedGuarantee({ onQuizOpen, callMode }: EnhancedGuaranteeProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -91,7 +100,16 @@ export default function EnhancedGuarantee({ onQuizOpen }: EnhancedGuaranteeProps
         </div>
 
         <div className="text-center">
-          {onQuizOpen ? (
+          {callMode ? (
+            <a
+              href={`tel:${PHONE_NUMBER_RAW}`}
+              onClick={trackPhoneClick}
+              className="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[15px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"
+            >
+              <Phone size={16} />
+              Call to Hear the Full Promise
+            </a>
+          ) : onQuizOpen ? (
             <button
               onClick={onQuizOpen}
               className="inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg font-heading font-bold text-[15px] tracking-[-0.01em] transition-all duration-300 hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.4)]"

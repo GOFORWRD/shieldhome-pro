@@ -1,0 +1,95 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Phone } from 'lucide-react'
+import { PHONE_NUMBER, PHONE_NUMBER_RAW } from '@/lib/constants'
+
+export default function NavigationCall() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  function trackPhoneClick() {
+    if (typeof window !== 'undefined') {
+      const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+      dl?.push({ event: 'phone_click', source: 'nav' })
+    }
+  }
+
+  return (
+    <>
+      {/* Trust Bar — fixed top */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-sm text-white h-9 flex items-center justify-center px-4">
+        {/* Mobile */}
+        <p className="md:hidden text-[11px] font-body text-slate-400 text-center tracking-[0.03em]">
+          <span className="text-amber-400">&#9733;</span>{' '}
+          4.8/5 from 58,000+ Reviews &middot; Smart Home Security Specialists
+        </p>
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-0 text-[11px] font-body text-slate-400 tracking-[0.03em]">
+          <span className="flex items-center gap-1">
+            <span className="text-amber-400">&#9733;</span>
+            4.8/5 &middot; 58,000+ Verified Reviews
+          </span>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>Smart Home Security Specialists</span>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>BBB A+ Rated</span>
+          <span className="mx-3 text-slate-700/60">|</span>
+          <span>SafeHome.org Best of 2025</span>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <header
+        className={`sticky top-9 z-50 transition-all duration-200 ${
+          scrolled
+            ? 'h-14 bg-slate-900/85 backdrop-blur-xl backdrop-saturate-[180%] shadow-md'
+            : 'h-[72px] bg-transparent'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto h-full px-6 md:px-12 lg:px-16 flex items-center justify-between">
+          {/* Logo */}
+          <a href="/" className="font-heading font-extrabold text-emerald-400 text-2xl tracking-tight">
+            Shield<span className="font-normal">Home</span>
+          </a>
+
+          {/* Nav items */}
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#how-it-works" className="text-sm font-body font-medium text-slate-400 hover:text-white transition-colors duration-150">
+              How It Works
+            </a>
+            <a href="#products" className="text-sm font-body font-medium text-slate-400 hover:text-white transition-colors duration-150">
+              Equipment
+            </a>
+            <a href="#compare" className="text-sm font-body font-medium text-slate-400 hover:text-white transition-colors duration-150">
+              Compare
+            </a>
+            <a
+              href={`tel:${PHONE_NUMBER_RAW}`}
+              onClick={trackPhoneClick}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-heading font-semibold px-5 py-2 rounded-lg transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(5,150,105,0.25)]"
+            >
+              <Phone size={14} />
+              Call {PHONE_NUMBER}
+            </a>
+          </nav>
+
+          {/* Mobile: phone button */}
+          <a
+            href={`tel:${PHONE_NUMBER_RAW}`}
+            onClick={trackPhoneClick}
+            className="md:hidden flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded-md text-sm font-heading font-semibold"
+          >
+            <Phone size={14} />
+            <span>Call Now</span>
+          </a>
+        </div>
+      </header>
+    </>
+  )
+}

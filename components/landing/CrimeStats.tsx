@@ -1,7 +1,8 @@
 'use client'
 
-import { AlertTriangle, DollarSign, Lock, ShieldAlert } from 'lucide-react'
+import { AlertTriangle, DollarSign, Lock, ShieldAlert, Phone } from 'lucide-react'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 const stats = [
   {
@@ -27,10 +28,18 @@ const stats = [
 ]
 
 interface CrimeStatsProps {
-  onQuizOpen: () => void
+  onQuizOpen?: () => void
+  callMode?: boolean
 }
 
-export default function CrimeStats({ onQuizOpen }: CrimeStatsProps) {
+function trackPhoneClick() {
+  if (typeof window !== 'undefined') {
+    const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+    dl?.push({ event: 'phone_click', source: 'crime_stats' })
+  }
+}
+
+export default function CrimeStats({ onQuizOpen, callMode }: CrimeStatsProps) {
   const headingRef = useScrollReveal<HTMLDivElement>()
   const gridRef = useStaggerReveal<HTMLDivElement>(80)
   const ctaRef = useScrollReveal<HTMLDivElement>()
@@ -67,12 +76,30 @@ export default function CrimeStats({ onQuizOpen }: CrimeStatsProps) {
         </div>
 
         <div ref={ctaRef} className="text-center">
-          <button
-            onClick={onQuizOpen}
-            className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"
-          >
-            See If Your Home Is at Risk
-          </button>
+          {callMode ? (
+            <a
+              href={`tel:${PHONE_NUMBER_RAW}`}
+              onClick={trackPhoneClick}
+              className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"
+            >
+              <Phone size={16} />
+              Call a Smart Home Pro
+            </a>
+          ) : onQuizOpen ? (
+            <button
+              onClick={onQuizOpen}
+              className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"
+            >
+              See If Your Home Is at Risk
+            </button>
+          ) : (
+            <a
+              href="#quiz"
+              className="inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(5,150,105,0.3)]"
+            >
+              See If Your Home Is at Risk
+            </a>
+          )}
         </div>
       </div>
     </section>
