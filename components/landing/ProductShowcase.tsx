@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { useScrollReveal, useStaggerReveal } from '@/hooks/useScrollReveal'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 const products = [
   {
@@ -64,14 +65,26 @@ function ProductCard({ product, onClick }: { product: typeof products[0]; onClic
   )
 }
 
-export default function ProductShowcase() {
+interface ProductShowcaseProps {
+  callMode?: boolean
+}
+
+export default function ProductShowcase({ callMode }: ProductShowcaseProps = {}) {
   const [showAll, setShowAll] = useState(false)
   const headingRef = useScrollReveal<HTMLDivElement>()
   const gridRef = useStaggerReveal<HTMLDivElement>(80)
 
   const handleCardClick = useCallback((_product: typeof products[0]) => {
+    if (callMode) {
+      if (typeof window !== 'undefined') {
+        const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+        dl?.push({ event: 'phone_click', source: 'product_card' })
+        window.location.href = `tel:${PHONE_NUMBER_RAW}`
+      }
+      return
+    }
     document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' })
-  }, [])
+  }, [callMode])
 
   const visibleProducts = showAll ? products : products.slice(0, 3)
 

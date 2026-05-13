@@ -1,6 +1,8 @@
 'use client'
 
+import { Phone } from 'lucide-react'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { PHONE_NUMBER_RAW } from '@/lib/constants'
 
 const features = [
   { feature: 'Professional Installation', vivint: 'FREE', adt: '$99–$199', simplisafe: '$124.99', ring: 'DIY' },
@@ -44,9 +46,17 @@ function Cell({ value, highlight }: { value: boolean | string; highlight?: boole
 
 interface ComparisonTableProps {
   onQuizOpen?: () => void
+  callMode?: boolean
 }
 
-export default function ComparisonTable({ onQuizOpen }: ComparisonTableProps) {
+function trackPhoneClick() {
+  if (typeof window !== 'undefined') {
+    const dl = (window as unknown as { dataLayer?: Array<Record<string, unknown>> }).dataLayer
+    dl?.push({ event: 'phone_click', source: 'comparison_table' })
+  }
+}
+
+export default function ComparisonTable({ onQuizOpen, callMode }: ComparisonTableProps) {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
@@ -105,7 +115,16 @@ export default function ComparisonTable({ onQuizOpen }: ComparisonTableProps) {
         </div>
 
         <div className="text-center mt-12">
-          {onQuizOpen ? (
+          {callMode ? (
+            <a
+              href={`tel:${PHONE_NUMBER_RAW}`}
+              onClick={trackPhoneClick}
+              className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
+            >
+              <Phone size={16} />
+              Call to See Why Families Choose ShieldHome
+            </a>
+          ) : onQuizOpen ? (
             <button
               onClick={onQuizOpen}
               className="inline-flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-heading font-semibold text-[15px] tracking-[-0.01em] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-px hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
